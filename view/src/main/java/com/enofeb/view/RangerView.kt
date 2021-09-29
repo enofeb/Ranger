@@ -17,6 +17,11 @@ class RangerView @JvmOverloads constructor(
     private var circleRadius: Int = 0
     private var barBasePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
+    private var valueToDraw: Float = 30f
+
+    private var minValue: Int = 20
+    private var maxValue: Int = 60
+
     init {
         barBasePaint.color = context.getColor(R.color.colorPurple)
     }
@@ -55,5 +60,12 @@ class RangerView @JvmOverloads constructor(
 
         canvas.drawRoundRect(rectangle, halfBarHeight, halfBarHeight, barBasePaint)
 
+        val percentFilled =
+            calculateProgress(valueToDraw.toInt(), minValue, maxValue).toFloat() / 100
+
+    }
+
+    private fun calculateProgress(value: Int, min: Int, max: Int): Int {
+        return 100 * (value - min) / (max - min)
     }
 }
