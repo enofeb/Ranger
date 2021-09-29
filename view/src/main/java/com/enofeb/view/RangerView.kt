@@ -13,7 +13,7 @@ class RangerView @JvmOverloads constructor(
     defStyleAttr: Int = R.attr.rangerView
 ) : View(context, attrs, defStyleAttr) {
 
-    private var barHeight: Int = 15
+    private var barHeight: Int = 30
     private var circleRadius: Int = 0
     private var barBasePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -42,7 +42,7 @@ class RangerView @JvmOverloads constructor(
     }
 
     private fun drawRangerBar(canvas: Canvas) {
-        val paddingSpaces = paddingLeft - paddingRight
+        val paddingSpaces = paddingLeft + paddingRight
         val barLength = (width - paddingSpaces).toFloat()
         val barCenter = (height / 2).toFloat()
 
