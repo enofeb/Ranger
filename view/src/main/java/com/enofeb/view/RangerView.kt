@@ -10,7 +10,7 @@ import android.view.View
 class RangerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
-    defStyleAttr: Int
+    defStyleAttr: Int = R.attr.rangerView
 ) : View(context, attrs, defStyleAttr) {
 
     private var barHeight: Int = 15
