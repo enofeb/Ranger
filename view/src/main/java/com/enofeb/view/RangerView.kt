@@ -16,6 +16,8 @@ class RangerView @JvmOverloads constructor(
     private var barHeight: Int = 30
     private var circleRadius: Int = 0
     private var barBasePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var barFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+
 
     private var valueToDraw: Float = 30f
 
@@ -24,6 +26,7 @@ class RangerView @JvmOverloads constructor(
 
     init {
         barBasePaint.color = context.getColor(R.color.colorPurple)
+        barFillPaint.color = context.getColor(R.color.colorPink)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -62,6 +65,12 @@ class RangerView @JvmOverloads constructor(
 
         val percentFilled =
             calculateProgress(valueToDraw.toInt(), minValue, maxValue).toFloat() / 100
+
+        val fillLength = barLength * percentFilled
+        val fillPosition = left + fillLength
+        val fillRect = RectF(left, top, fillPosition, bottom)
+
+        canvas.drawRoundRect(fillRect, halfBarHeight, halfBarHeight,barFillPaint)
 
     }
 
