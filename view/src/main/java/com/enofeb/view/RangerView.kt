@@ -3,9 +3,11 @@ package com.enofeb.view
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.graphics.Rect
 import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
+import kotlin.math.roundToInt
 
 class RangerView @JvmOverloads constructor(
     context: Context,
@@ -13,10 +15,12 @@ class RangerView @JvmOverloads constructor(
     defStyleAttr: Int = R.attr.rangerView
 ) : View(context, attrs, defStyleAttr) {
 
-    private var barHeight: Int = 30
-    private var circleRadius: Int = 0
+    private var barHeight: Int = 40
+    private var circleRadius: Int = 35
     private var barBasePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var barFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var circleFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
 
     private var valueToDraw: Float = 30f
@@ -27,6 +31,8 @@ class RangerView @JvmOverloads constructor(
     init {
         barBasePaint.color = context.getColor(R.color.colorPurple)
         barFillPaint.color = context.getColor(R.color.colorPink)
+        circleFillPaint.color = context.getColor(R.color.colorBlack)
+        valuePaint.color = context.getColor(R.color.colorWhite)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -70,7 +76,18 @@ class RangerView @JvmOverloads constructor(
         val fillPosition = left + fillLength
         val fillRect = RectF(left, top, fillPosition, bottom)
 
-        canvas.drawRoundRect(fillRect, halfBarHeight, halfBarHeight,barFillPaint)
+        canvas.drawRoundRect(fillRect, halfBarHeight, halfBarHeight, barFillPaint)
+
+        canvas.drawCircle(fillPosition, barCenter, circleRadius.toFloat(), circleFillPaint)
+
+//        val bounds = Rect()
+//        val valueString = valueToDraw.roundToInt().toString()
+//        valuePaint.getTextBounds(valueString, 0, valueString.length, bounds)
+//
+//        val y = barCenter + bounds.height() / 2
+//
+//        canvas.drawText(valueString, fillPosition, y, valuePaint)
+
 
     }
 
