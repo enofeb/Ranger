@@ -1,13 +1,16 @@
 package com.enofeb.view
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Paint
-import android.graphics.Rect
-import android.graphics.RectF
+import android.content.res.Resources
+import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import kotlin.math.roundToInt
+import androidx.core.content.res.ResourcesCompat
+import android.graphics.drawable.BitmapDrawable
+import androidx.core.content.ContextCompat
+
+import androidx.core.graphics.drawable.toBitmap
+
 
 class RangerView @JvmOverloads constructor(
     context: Context,
@@ -51,7 +54,7 @@ class RangerView @JvmOverloads constructor(
 
     private fun measureHeight(measureSpec: Int): Int {
         var size = paddingTop + paddingBottom
-        size += barHeight.coerceAtLeast(circleRadius)
+        size += barHeight.coerceAtLeast(100)
         return resolveSizeAndState(size, measureSpec, 0)
     }
 
@@ -78,16 +81,9 @@ class RangerView @JvmOverloads constructor(
 
         canvas.drawRoundRect(fillRect, halfBarHeight, halfBarHeight, barFillPaint)
 
-        canvas.drawCircle(fillPosition, barCenter, circleRadius.toFloat(), circleFillPaint)
+        val icon = ContextCompat.getDrawable(context, R.drawable.ic_location)
 
-//        val bounds = Rect()
-//        val valueString = valueToDraw.roundToInt().toString()
-//        valuePaint.getTextBounds(valueString, 0, valueString.length, bounds)
-//
-//        val y = barCenter + bounds.height() / 2
-//
-//        canvas.drawText(valueString, fillPosition, y, valuePaint)
-
+        canvas.drawBitmap(icon!!.toBitmap(), fillLength, 0f, circleFillPaint)
 
     }
 
