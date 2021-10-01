@@ -1,5 +1,7 @@
 package com.enofeb.view
 
+import android.animation.ValueAnimator
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.*
@@ -7,9 +9,13 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.core.content.res.ResourcesCompat
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
+import android.view.MotionEvent
 import androidx.core.content.ContextCompat
 
 import androidx.core.graphics.drawable.toBitmap
+import kotlin.math.abs
+import kotlin.math.roundToInt
 
 
 class RangerView @JvmOverloads constructor(
@@ -19,17 +25,53 @@ class RangerView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     private var barHeight: Int = 40
-    private var circleRadius: Int = 35
     private var barBasePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var barFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var circleFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-
     private var valueToDraw: Float = 30f
-
     private var minValue: Int = 20
     private var maxValue: Int = 60
+
+    private var animation: ValueAnimator? = null
+    private var animated: Boolean = false
+    private var animationDuration = 3000L
+
+
+    var currentValue: Int = 1
+        set(value) {
+            val previousValue = currentValue
+            field = value
+            var newValue = value
+
+            if (newValue < minValue || newValue > maxValue) {
+                newValue = currentValue
+                field = newValue
+            }
+
+            Log.e("ELLO","currentValue1")
+
+            animation?.cancel()
+
+            animation = ValueAnimator.ofFloat(previousValue.toFloat(), currentValue.toFloat())
+            val changeValue = abs(currentValue - previousValue)
+
+            val durationToUse =
+                (animationDuration * (changeValue.toFloat() / minValue.toFloat())).toLong()
+
+            animation?.duration = durationToUse
+
+            animation?.addUpdateListener { valueAnimator ->
+                valueToDraw = valueAnimator.animatedValue as Float
+                this.invalidate()
+            }
+
+            animation!!.start()
+
+            invalidate()
+        }
+
 
     init {
         barBasePaint.color = context.getColor(R.color.colorPurple)
@@ -45,6 +87,50 @@ class RangerView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawRangerBar(canvas)
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun onTouchEvent(event: MotionEvent): Boolean {
+
+        var coordinate = event.x.toDouble()
+        val canvasSize = (width - paddingStart - paddingEnd).toDouble()
+        val eventAction = event.action
+
+        if (coordinate < 0) {
+            coordinate = 0.0
+        } else if (coordinate > canvasSize) {
+            coordinate = canvasSize
+        }
+
+        when (eventAction) {
+            MotionEvent.ACTION_DOWN -> {
+                Log.e("ELLO","down")
+            }
+            MotionEvent.ACTION_UP -> {
+                Log.e("ELLO","up")
+                val value = (coordinate / canvasSize * 100).toInt()
+                updatePosition(value)
+            }
+            MotionEvent.ACTION_MOVE -> {
+                Log.e("ELLO","move")
+                val value = (coordinate / canvasSize * 100).toInt()
+                updatePosition(value)
+            }
+        }
+
+        return true
+    }
+
+    override fun performClick(): Boolean {
+        super.performClick()
+        return true
+    }
+
+    private fun updatePosition(value: Int) {
+        val calculatedValue =
+            (value * (maxValue - minValue) / 100).toFloat().roundToInt().toDouble()
+        val displayValue = ((calculatedValue.toInt() + minValue))
+        currentValue = displayValue
     }
 
     private fun measureWidth(measureSpec: Int): Int {
@@ -89,5 +175,10 @@ class RangerView @JvmOverloads constructor(
 
     private fun calculateProgress(value: Int, min: Int, max: Int): Int {
         return 100 * (value - min) / (max - min)
+    }
+
+    fun setAnimated(animated: Boolean, animationDuration: Long) {
+        this.animated = animated
+        this.animationDuration = animationDuration
     }
 }
