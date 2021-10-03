@@ -3,19 +3,14 @@ package com.enofeb.view
 import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.res.ResourcesCompat
-import android.graphics.drawable.BitmapDrawable
 import android.util.Log
 import android.view.MotionEvent
 import androidx.core.content.ContextCompat
-
 import androidx.core.graphics.drawable.toBitmap
 import kotlin.math.abs
-import kotlin.math.roundToInt
 
 
 class RangerView @JvmOverloads constructor(
@@ -31,15 +26,15 @@ class RangerView @JvmOverloads constructor(
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var valueToDraw: Float = 30f
-    private var minValue: Int = 20
-    private var maxValue: Int = 60
+    private var minValue: Double = 0.0
+    private var maxValue: Double = 100.0
 
     private var animation: ValueAnimator? = null
     private var animated: Boolean = false
     private var animationDuration = 3000L
 
 
-    var currentValue: Int = 1
+    var currentValue: Double = 1.0
         set(value) {
             val previousValue = currentValue
             field = value
@@ -50,20 +45,28 @@ class RangerView @JvmOverloads constructor(
                 field = newValue
             }
 
-            Log.e("ELLO","currentValue1")
 
             animation?.cancel()
 
             animation = ValueAnimator.ofFloat(previousValue.toFloat(), currentValue.toFloat())
             val changeValue = abs(currentValue - previousValue)
 
+            Log.e("ELLO0", currentValue.toFloat().toString())
+
+            Log.e("ELLO1", changeValue.toString())
+
+
             val durationToUse =
                 (animationDuration * (changeValue.toFloat() / minValue.toFloat())).toLong()
+
+            Log.e("ELLO2", durationToUse.toString())
 
             animation?.duration = durationToUse
 
             animation?.addUpdateListener { valueAnimator ->
                 valueToDraw = valueAnimator.animatedValue as Float
+
+                Log.e("ELLO3", valueAnimator.animatedValue.toString())
                 this.invalidate()
             }
 
@@ -102,18 +105,22 @@ class RangerView @JvmOverloads constructor(
             coordinate = canvasSize
         }
 
+        Log.e("ELLOUCORDINATE", coordinate.toString())
+        Log.e("ELLOCANVASSIZE", canvasSize.toString())
+
         when (eventAction) {
             MotionEvent.ACTION_DOWN -> {
-                Log.e("ELLO","down")
+                // Log.e("ELLO", "down")
             }
             MotionEvent.ACTION_UP -> {
-                Log.e("ELLO","up")
+                // Log.e("ELLO", "up")
                 val value = (coordinate / canvasSize * 100).toInt()
                 updatePosition(value)
             }
             MotionEvent.ACTION_MOVE -> {
-                Log.e("ELLO","move")
+                //Log.e("ELLO", "move")
                 val value = (coordinate / canvasSize * 100).toInt()
+                Log.e("ELLOVALUE", value.toString())
                 updatePosition(value)
             }
         }
@@ -127,9 +134,8 @@ class RangerView @JvmOverloads constructor(
     }
 
     private fun updatePosition(value: Int) {
-        val calculatedValue =
-            (value * (maxValue - minValue) / 100).toFloat().roundToInt().toDouble()
-        val displayValue = ((calculatedValue.toInt() + minValue))
+        val calculatedValue = (value * (maxValue - minValue) / 100)
+        val displayValue = ((calculatedValue) + minValue)
         currentValue = displayValue
     }
 
@@ -173,7 +179,7 @@ class RangerView @JvmOverloads constructor(
 
     }
 
-    private fun calculateProgress(value: Int, min: Int, max: Int): Int {
+    private fun calculateProgress(value: Int, min: Double, max: Double): Double {
         return 100 * (value - min) / (max - min)
     }
 
