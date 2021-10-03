@@ -25,7 +25,7 @@ class RangerView @JvmOverloads constructor(
     private var circleFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
-    private var valueToDraw: Float = 30f
+    private var valueToDraw: Float = 5f
     private var minValue: Double = 0.0
     private var maxValue: Double = 100.0
 
@@ -34,7 +34,7 @@ class RangerView @JvmOverloads constructor(
     private var animationDuration = 3000L
 
 
-    var currentValue: Double = 1.0
+    var currentValue: Double = 0.0
         set(value) {
             val previousValue = currentValue
             field = value
@@ -49,6 +49,7 @@ class RangerView @JvmOverloads constructor(
             animation?.cancel()
 
             animation = ValueAnimator.ofFloat(previousValue.toFloat(), currentValue.toFloat())
+
             val changeValue = abs(currentValue - previousValue)
 
             Log.e("ELLO0", currentValue.toFloat().toString())
@@ -56,19 +57,14 @@ class RangerView @JvmOverloads constructor(
             Log.e("ELLO1", changeValue.toString())
 
 
-            val durationToUse =
-                (animationDuration * (changeValue.toFloat() / minValue.toFloat())).toLong()
-
-            Log.e("ELLO2", durationToUse.toString())
-
-            animation?.duration = durationToUse
-
             animation?.addUpdateListener { valueAnimator ->
                 valueToDraw = valueAnimator.animatedValue as Float
 
                 Log.e("ELLO3", valueAnimator.animatedValue.toString())
                 this.invalidate()
             }
+
+            valueToDraw = currentValue.toFloat()
 
             animation!!.start()
 
