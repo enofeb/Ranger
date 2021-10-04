@@ -158,16 +158,16 @@ class RangerView @JvmOverloads constructor(
         val right = paddingLeft + barLength
         val rectangle = RectF(left, top, right, bottom)
 
-        canvas.drawRoundRect(rectangle, halfBarHeight, halfBarHeight, barBasePaint)
+        canvas.drawRoundRect(rectangle, halfBarHeight / 2, halfBarHeight / 2, barBasePaint)
 
         val percentFilled =
             calculateProgress(valueToDraw.toInt(), minValue, maxValue).toFloat() / 100
 
         val fillLength = barLength * percentFilled
         val fillPosition = left + fillLength
-        val fillRect = RectF(left, top, fillPosition, bottom)
+        val fillRect = RectF(left + 10, top + 10, fillPosition - 10, bottom - 10)
 
-        canvas.drawRoundRect(fillRect, halfBarHeight, halfBarHeight, barFillPaint)
+        canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, barFillPaint)
 
         val icon = ContextCompat.getDrawable(context, R.drawable.ic_location)
 
