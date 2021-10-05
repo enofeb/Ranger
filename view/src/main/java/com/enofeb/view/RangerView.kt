@@ -14,6 +14,7 @@ import androidx.core.graphics.drawable.toBitmap
 import kotlin.math.abs
 import com.google.android.material.internal.ViewUtils.dpToPx
 import com.google.android.material.internal.ViewUtils.dpToPx
+import kotlin.math.roundToInt
 
 
 class RangerView @JvmOverloads constructor(
@@ -26,6 +27,7 @@ class RangerView @JvmOverloads constructor(
     private var barBasePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var barFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var circleFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var indicatorFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var valueToDraw: Float = 5f
@@ -80,8 +82,10 @@ class RangerView @JvmOverloads constructor(
     init {
         barBasePaint.color = context.getColor(R.color.colorPurple)
         barFillPaint.color = context.getColor(R.color.colorPink)
-        circleFillPaint.color = context.getColor(R.color.colorBlack)
+        circleFillPaint.color = context.getColor(R.color.colorGrey)
         valuePaint.color = context.getColor(R.color.colorWhite)
+        indicatorFillPaint.color = context.getColor(R.color.colorWhite)
+        valuePaint.textSize = 24f
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -182,13 +186,29 @@ class RangerView @JvmOverloads constructor(
 
         canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, barFillPaint)
 
+        canvas.drawCircle(fillPosition, barCenter, 20f, indicatorFillPaint)
+
+
 //        val icon = ContextCompat.getDrawable(context, R.drawable.ic_location)
 //
 //        canvas.drawBitmap(icon!!.toBitmap(), fillLength, 0f, circleFillPaint)
 
+        val radius = 30f
+
         if (isBubbleVisible == true) {
-            drawBubble(canvas, fillLength, fillPosition, 0f)
+            //    drawBubble(canvas, fillPosition - 10, fillPosition - 10, 0f)
+            canvas.drawCircle(fillPosition, top - radius, radius, circleFillPaint)
         }
+
+
+        val bounds = Rect()
+        val valueString = valueToDraw.roundToInt().toString()
+        valuePaint.getTextBounds(valueString, 0, valueString.length, bounds)
+        valuePaint.textAlign = Paint.Align.CENTER
+
+        val y = top - radius
+
+        canvas.drawText(valueString, fillPosition, y, valuePaint)
 
     }
 
@@ -196,62 +216,9 @@ class RangerView @JvmOverloads constructor(
         return 100 * (value - min) / (max - min)
     }
 
-    private fun drawBubblePath(
-        canvas: Canvas,
-        triangleCenterX: Float,
-        height: Float,
-        width: Float
-    ) {
-        val path = Path()
-        val padding = 3
-        val rect = Rect(
-            padding,
-            padding,
-            width.toInt() - padding,
-            (height - dpToPx(BUBBLE_ARROW_HEIGHT)).toInt() - padding
-        )
-        val roundRectHeight = (height - dpToPx(BUBBLE_ARROW_HEIGHT)) / 2
-        path.moveTo(rect.left + roundRectHeight, rect.top.toFloat())
-        path.lineTo(rect.right - roundRectHeight, rect.top.toFloat())
-        path.quadTo(
-            rect.right.toFloat(),
-            rect.top.toFloat(),
-            rect.right.toFloat(),
-            rect.top + roundRectHeight
-        )
-        path.lineTo(rect.right.toFloat(), rect.bottom - roundRectHeight)
-        path.quadTo(
-            rect.right.toFloat(), rect.bottom.toFloat(), rect.right - roundRectHeight,
-            rect.bottom.toFloat()
-        )
-        path.lineTo(
-            triangleCenterX + dpToPx(BUBBLE_ARROW_WIDTH) / 2f,
-            height - dpToPx(BUBBLE_ARROW_HEIGHT) - padding
-        )
-        path.lineTo(triangleCenterX, height - padding)
-        path.lineTo(
-            triangleCenterX - dpToPx(BUBBLE_ARROW_WIDTH) / 2f,
-            height - dpToPx(BUBBLE_ARROW_HEIGHT) - padding
-        )
-        path.lineTo(rect.left + roundRectHeight, rect.bottom.toFloat())
-        path.quadTo(
-            rect.left.toFloat(),
-            rect.bottom.toFloat(),
-            rect.left.toFloat(),
-            rect.bottom - roundRectHeight
-        )
-        path.lineTo(rect.left.toFloat(), rect.top + roundRectHeight)
-        path.quadTo(
-            rect.left.toFloat(), rect.top.toFloat(), rect.left + roundRectHeight,
-            rect.top.toFloat()
-        )
-        path.close()
-        canvas.drawPath(path, barBasePaint)
-    }
-
     private fun drawBubble(canvas: Canvas, centerX: Float, triangleCenterX: Float, y: Float) {
         var demoTriangleCenterX = triangleCenterX
-        val width = 130f
+        val width = 80f
         val height = 100f
         canvas.save()
         run {
@@ -260,6 +227,59 @@ class RangerView @JvmOverloads constructor(
             drawBubblePath(canvas, demoTriangleCenterX, height, width)
         }
         canvas.restore()
+    }
+
+    private fun drawBubblePath(
+        canvas: Canvas,
+        triangleCenterX: Float,
+        height: Float,
+        width: Float
+    ) {
+//        val path = Path()
+//        val padding = 3
+//        val rect = Rect(
+//            padding,
+//            padding,
+//            width.toInt() - padding,
+//            (height - dpToPx(BUBBLE_ARROW_HEIGHT)).toInt() - padding
+//        )
+//        val roundRectHeight = (height - dpToPx(BUBBLE_ARROW_HEIGHT)) / 2
+//        path.moveTo(rect.left + roundRectHeight, rect.top.toFloat())
+//        path.lineTo(rect.right - roundRectHeight, rect.top.toFloat())
+//        path.quadTo(
+//            rect.right.toFloat(),
+//            rect.top.toFloat(),
+//            rect.right.toFloat(),
+//            rect.top + roundRectHeight
+//        )
+//        path.lineTo(rect.right.toFloat(), rect.bottom - roundRectHeight)
+//        path.quadTo(
+//            rect.right.toFloat(), rect.bottom.toFloat(), rect.right - roundRectHeight,
+//            rect.bottom.toFloat()
+//        )
+//        path.lineTo(
+//            triangleCenterX + dpToPx(BUBBLE_ARROW_WIDTH) / 2f,
+//            height - dpToPx(BUBBLE_ARROW_HEIGHT) - padding
+//        )
+//        path.lineTo(triangleCenterX, height - padding)
+//        path.lineTo(
+//            triangleCenterX - dpToPx(BUBBLE_ARROW_WIDTH) / 2f,
+//            height - dpToPx(BUBBLE_ARROW_HEIGHT) - padding
+//        )
+//        path.lineTo(rect.left + roundRectHeight, rect.bottom.toFloat())
+//        path.quadTo(
+//            rect.left.toFloat(),
+//            rect.bottom.toFloat(),
+//            rect.left.toFloat(),
+//            rect.bottom - roundRectHeight
+//        )
+//        path.lineTo(rect.left.toFloat(), rect.top + roundRectHeight)
+//        path.quadTo(
+//            rect.left.toFloat(), rect.top.toFloat(), rect.left + roundRectHeight,
+//            rect.top.toFloat()
+//        )
+//        path.close()
+        canvas.drawCircle(triangleCenterX, barHeight.toFloat(), 10f, circleFillPaint)
     }
 
 

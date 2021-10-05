@@ -4,4 +4,5 @@
     <color name="colorPurple">#FF6200EE</color>
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorBlack">#000000</color>
+    <color name="colorGrey">#808080</color>
 </resources>
