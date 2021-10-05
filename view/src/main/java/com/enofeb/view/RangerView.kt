@@ -8,9 +8,12 @@ import android.util.AttributeSet
 import android.view.View
 import android.util.Log
 import android.view.MotionEvent
+import androidx.constraintlayout.solver.widgets.Rectangle
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.toBitmap
 import kotlin.math.abs
+import com.google.android.material.internal.ViewUtils.dpToPx
+import com.google.android.material.internal.ViewUtils.dpToPx
 
 
 class RangerView @JvmOverloads constructor(
@@ -32,6 +35,8 @@ class RangerView @JvmOverloads constructor(
     private var animation: ValueAnimator? = null
     private var animated: Boolean = false
     private var animationDuration = 3000L
+
+    private var isBubbleVisible: Boolean? = false
 
 
     var currentValue: Double = 0.0
@@ -104,6 +109,9 @@ class RangerView @JvmOverloads constructor(
         Log.e("ELLOUCORDINATE", coordinate.toString())
         Log.e("ELLOCANVASSIZE", canvasSize.toString())
 
+        Log.e("ENES2", eventAction.toString())
+
+
         when (eventAction) {
             MotionEvent.ACTION_DOWN -> {
                 // Log.e("ELLO", "down")
@@ -111,13 +119,18 @@ class RangerView @JvmOverloads constructor(
             MotionEvent.ACTION_UP -> {
                 // Log.e("ELLO", "up")
                 val value = (coordinate / canvasSize * 100).toInt()
+                isBubbleVisible = false
                 updatePosition(value)
             }
             MotionEvent.ACTION_MOVE -> {
                 //Log.e("ELLO", "move")
                 val value = (coordinate / canvasSize * 100).toInt()
                 Log.e("ELLOVALUE", value.toString())
+                isBubbleVisible = true
                 updatePosition(value)
+            }
+            MotionEvent.ACTION_CANCEL -> {
+                Log.e("ENES", "CANCEL")
             }
         }
 
@@ -169,9 +182,13 @@ class RangerView @JvmOverloads constructor(
 
         canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, barFillPaint)
 
-        val icon = ContextCompat.getDrawable(context, R.drawable.ic_location)
+//        val icon = ContextCompat.getDrawable(context, R.drawable.ic_location)
+//
+//        canvas.drawBitmap(icon!!.toBitmap(), fillLength, 0f, circleFillPaint)
 
-        canvas.drawBitmap(icon!!.toBitmap(), fillLength, 0f, circleFillPaint)
+        if (isBubbleVisible == true) {
+            drawBubble(canvas, fillLength, fillPosition, 0f)
+        }
 
     }
 
@@ -179,8 +196,84 @@ class RangerView @JvmOverloads constructor(
         return 100 * (value - min) / (max - min)
     }
 
+    private fun drawBubblePath(
+        canvas: Canvas,
+        triangleCenterX: Float,
+        height: Float,
+        width: Float
+    ) {
+        val path = Path()
+        val padding = 3
+        val rect = Rect(
+            padding,
+            padding,
+            width.toInt() - padding,
+            (height - dpToPx(BUBBLE_ARROW_HEIGHT)).toInt() - padding
+        )
+        val roundRectHeight = (height - dpToPx(BUBBLE_ARROW_HEIGHT)) / 2
+        path.moveTo(rect.left + roundRectHeight, rect.top.toFloat())
+        path.lineTo(rect.right - roundRectHeight, rect.top.toFloat())
+        path.quadTo(
+            rect.right.toFloat(),
+            rect.top.toFloat(),
+            rect.right.toFloat(),
+            rect.top + roundRectHeight
+        )
+        path.lineTo(rect.right.toFloat(), rect.bottom - roundRectHeight)
+        path.quadTo(
+            rect.right.toFloat(), rect.bottom.toFloat(), rect.right - roundRectHeight,
+            rect.bottom.toFloat()
+        )
+        path.lineTo(
+            triangleCenterX + dpToPx(BUBBLE_ARROW_WIDTH) / 2f,
+            height - dpToPx(BUBBLE_ARROW_HEIGHT) - padding
+        )
+        path.lineTo(triangleCenterX, height - padding)
+        path.lineTo(
+            triangleCenterX - dpToPx(BUBBLE_ARROW_WIDTH) / 2f,
+            height - dpToPx(BUBBLE_ARROW_HEIGHT) - padding
+        )
+        path.lineTo(rect.left + roundRectHeight, rect.bottom.toFloat())
+        path.quadTo(
+            rect.left.toFloat(),
+            rect.bottom.toFloat(),
+            rect.left.toFloat(),
+            rect.bottom - roundRectHeight
+        )
+        path.lineTo(rect.left.toFloat(), rect.top + roundRectHeight)
+        path.quadTo(
+            rect.left.toFloat(), rect.top.toFloat(), rect.left + roundRectHeight,
+            rect.top.toFloat()
+        )
+        path.close()
+        canvas.drawPath(path, barBasePaint)
+    }
+
+    private fun drawBubble(canvas: Canvas, centerX: Float, triangleCenterX: Float, y: Float) {
+        var demoTriangleCenterX = triangleCenterX
+        val width = 130f
+        val height = 100f
+        canvas.save()
+        run {
+            canvas.translate(centerX - width / 2f, y)
+            demoTriangleCenterX -= centerX - width / 2f
+            drawBubblePath(canvas, demoTriangleCenterX, height, width)
+        }
+        canvas.restore()
+    }
+
+
     fun setAnimated(animated: Boolean, animationDuration: Long) {
         this.animated = animated
         this.animationDuration = animationDuration
+    }
+
+    private fun dpToPx(size: Float): Float {
+        return size * resources.displayMetrics.density
+    }
+
+    companion object {
+        private const val BUBBLE_ARROW_HEIGHT = 10f
+        private const val BUBBLE_ARROW_WIDTH = 20f
     }
 }
