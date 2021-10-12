@@ -43,16 +43,17 @@ class RangerView @JvmOverloads constructor(
 
     private var _indicatorRadius: Int = 20
 
+    private var _minValue: Double = 0.0
+
+    private var _maxValue: Double = 100.0
+
+    private var valueToDraw: Float = 5f
 
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var subBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var circlePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var indicatorPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var indicatorTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-
-    private var valueToDraw: Float = 5f
-    private var minValue: Double = 0.0
-    private var maxValue: Double = 100.0
 
     private var animation: ValueAnimator? = null
 
@@ -117,6 +118,18 @@ class RangerView @JvmOverloads constructor(
         get() = _indicatorRadius
         set(value) {
             _indicatorRadius = value
+        }
+
+    var minValue: Double
+        get() = _minValue
+        set(value) {
+            _minValue = value
+        }
+
+    var maxValue: Double
+        get() = _maxValue
+        set(value) {
+            _maxValue = value
         }
 
     var currentValue: Double = 0.0
