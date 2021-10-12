@@ -130,7 +130,7 @@ class RangerView @JvmOverloads constructor(
             _maxValue = value
         }
 
-    var currentValue: Double = 0.0
+    var currentValue: Double = DEFAULT_CURRENT_VALUE
         set(value) {
             val previousValue = currentValue
             field = value
@@ -323,5 +323,9 @@ class RangerView @JvmOverloads constructor(
 
     private fun calculateProgress(value: Int, min: Double, max: Double): Double {
         return 100 * (value - min) / (max - min)
+    }
+
+    companion object {
+        const val DEFAULT_CURRENT_VALUE = 0.0
     }
 }
