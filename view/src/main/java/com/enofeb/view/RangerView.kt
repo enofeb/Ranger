@@ -37,7 +37,9 @@ class RangerView @JvmOverloads constructor(
 
     private var _indicatorTextSize = 15f
 
-    private var barHeight: Int = 40
+    private var _barHeight: Int = 40
+
+
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var subBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var circlePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -93,6 +95,12 @@ class RangerView @JvmOverloads constructor(
         set(@Dimension value) {
             _indicatorTextSize = value
             indicatorTextPaint.textSize = value
+        }
+
+    var barHeight: Int
+        get() = _barHeight
+        set(value) {
+            _barHeight = value
         }
 
     var currentValue: Double = 0.0
@@ -209,6 +217,10 @@ class RangerView @JvmOverloads constructor(
                 R.styleable.RangerView_indicatorTextSize,
                 indicatorTextSize
             )
+            barHeight = typedArray.getInteger(
+                R.styleable.RangerView_barHeight,
+                barHeight
+            )
         } catch (e: Exception) {
             //no-op
         } finally {
@@ -268,7 +280,6 @@ class RangerView @JvmOverloads constructor(
         val valueString = valueToDraw.roundToInt().toString()
         indicatorTextPaint.getTextBounds(valueString, 0, valueString.length, bounds)
         indicatorTextPaint.textAlign = Paint.Align.CENTER
-        indicatorTextPaint.textSize = 15f
 
         val y = top - radius
 
