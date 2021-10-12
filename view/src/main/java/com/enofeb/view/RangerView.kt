@@ -26,11 +26,14 @@ class RangerView @JvmOverloads constructor(
     @ColorInt
     private var _circleColor = context.getColor(R.color.colorGrey)
 
+    @ColorInt
+    private var _indicatorColor = context.getColor(R.color.colorWhite)
+
     private var barHeight: Int = 40
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var subBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var circlePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var indicatorFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var indicatorPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var valueToDraw: Float = 5f
@@ -60,6 +63,13 @@ class RangerView @JvmOverloads constructor(
         set(@ColorInt value) {
             _circleColor = value
             circlePaint.color = value
+        }
+
+    var indicatorColor: Int
+        @ColorInt get() = _circleColor
+        set(@ColorInt value) {
+            _indicatorColor = value
+            indicatorPaint.color = value
         }
 
 
@@ -93,7 +103,6 @@ class RangerView @JvmOverloads constructor(
 
     init {
         valuePaint.color = context.getColor(R.color.colorWhite)
-        indicatorFillPaint.color = context.getColor(R.color.colorWhite)
         valuePaint.textSize = 24f
 
         obtainStyledAttributes(attrs, defStyleAttr)
@@ -169,6 +178,10 @@ class RangerView @JvmOverloads constructor(
                 R.styleable.RangerView_circleColor,
                 circleColor
             )
+            indicatorColor = typedArray.getColor(
+                R.styleable.RangerView_indicatorColor,
+                indicatorColor
+            )
         } catch (e: Exception) {
             //no-op
         } finally {
@@ -216,7 +229,7 @@ class RangerView @JvmOverloads constructor(
 
         canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, subBarPaint)
 
-        canvas.drawCircle(fillPosition, barCenter, 15f, indicatorFillPaint)
+        canvas.drawCircle(fillPosition, barCenter, 15f, indicatorPaint)
 
         val radius = 20f
 
