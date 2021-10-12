@@ -24,17 +24,20 @@ class RangerView @JvmOverloads constructor(
     private var _subBarColor = context.getColor(R.color.colorPink)
 
     @ColorInt
-    private var _circleColor = context.getColor(R.color.colorGrey)
+    private var _circleColor = context.getColor(R.color.colorWhite)
 
     @ColorInt
-    private var _indicatorColor = context.getColor(R.color.colorWhite)
+    private var _indicatorColor = context.getColor(R.color.colorGrey)
+
+    @ColorInt
+    private var _indicatorTextColor = context.getColor(R.color.colorWhite)
 
     private var barHeight: Int = 40
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var subBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var circlePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var indicatorPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var indicatorTextPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
     private var valueToDraw: Float = 5f
     private var minValue: Double = 0.0
@@ -72,6 +75,13 @@ class RangerView @JvmOverloads constructor(
             indicatorPaint.color = value
         }
 
+    var indicatorTextColor: Int
+        @ColorInt get() = _indicatorTextColor
+        set(@ColorInt value) {
+            _indicatorTextColor = value
+            indicatorTextPaint.color = value
+        }
+
 
     var currentValue: Double = 0.0
         set(value) {
@@ -102,9 +112,6 @@ class RangerView @JvmOverloads constructor(
 
 
     init {
-        valuePaint.color = context.getColor(R.color.colorWhite)
-        valuePaint.textSize = 24f
-
         obtainStyledAttributes(attrs, defStyleAttr)
     }
 
@@ -182,6 +189,10 @@ class RangerView @JvmOverloads constructor(
                 R.styleable.RangerView_indicatorColor,
                 indicatorColor
             )
+            indicatorTextColor = typedArray.getColor(
+                R.styleable.RangerView_indicatorTextColor,
+                indicatorTextColor
+            )
         } catch (e: Exception) {
             //no-op
         } finally {
@@ -239,13 +250,13 @@ class RangerView @JvmOverloads constructor(
 
         val bounds = Rect()
         val valueString = valueToDraw.roundToInt().toString()
-        valuePaint.getTextBounds(valueString, 0, valueString.length, bounds)
-        valuePaint.textAlign = Paint.Align.CENTER
-        valuePaint.textSize = 15f
+        indicatorTextPaint.getTextBounds(valueString, 0, valueString.length, bounds)
+        indicatorTextPaint.textAlign = Paint.Align.CENTER
+        indicatorTextPaint.textSize = 15f
 
         val y = top - radius
 
-        canvas.drawText(valueString, fillPosition, y, valuePaint)
+        canvas.drawText(valueString, fillPosition, y, indicatorTextPaint)
 
     }
 

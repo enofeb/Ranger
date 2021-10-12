@@ -7,5 +7,6 @@
         <attr name="subBarColor" format="color" />
         <attr name="circleColor" format="color" />
         <attr name="indicatorColor" format="color" />
+        <attr name="indicatorTextColor" format="color" />
     </declare-styleable>
 </resources>
