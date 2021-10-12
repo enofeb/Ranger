@@ -5,12 +5,10 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
-import android.util.TypedValue
 import android.view.View
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
-import androidx.core.content.ContextCompat
 import java.lang.Exception
 import kotlin.math.roundToInt
 
@@ -39,9 +37,9 @@ class RangerView @JvmOverloads constructor(
 
     private var _barHeight: Int = 40
 
-    private var _circleRadius: Int = 15
+    private var _circleRadius: Int = 20
 
-    private var _indicatorRadius: Int = 20
+    private var _indicatorRadius: Int = 25
 
     private var _minValue: Double = 0.0
 
@@ -81,7 +79,7 @@ class RangerView @JvmOverloads constructor(
         }
 
     var indicatorColor: Int
-        @ColorInt get() = _circleColor
+        @ColorInt get() = _indicatorColor
         set(@ColorInt value) {
             _indicatorColor = value
             indicatorPaint.color = value
@@ -305,12 +303,12 @@ class RangerView @JvmOverloads constructor(
 
         canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, subBarPaint)
 
-        canvas.drawCircle(fillPosition, barCenter, circleRadius.toFloat(), indicatorPaint)
+        canvas.drawCircle(fillPosition, barCenter, circleRadius.toFloat(), circlePaint)
 
         val radius = indicatorRadius.toFloat()
 
         if (isBubbleVisible == true) {
-            canvas.drawCircle(fillPosition, top - radius, radius, circlePaint)
+            canvas.drawCircle(fillPosition, top - radius, radius, indicatorPaint)
         }
 
         val bounds = Rect()
