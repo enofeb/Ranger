@@ -12,6 +12,8 @@ import androidx.annotation.Dimension
 import java.lang.Exception
 import kotlin.math.roundToInt
 
+typealias OnValueChangeListener = ((Double) -> Unit)
+
 class RangerView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -56,6 +58,8 @@ class RangerView @JvmOverloads constructor(
     private var animation: ValueAnimator? = null
 
     private var isBubbleVisible: Boolean? = false
+
+    var onValueChangeListener: OnValueChangeListener? = null
 
     var baseBarColor: Int
         @ColorInt get() = _baseBarColor
@@ -147,6 +151,7 @@ class RangerView @JvmOverloads constructor(
 
             animation?.addUpdateListener { valueAnimator ->
                 valueToDraw = valueAnimator.animatedValue as Float
+                onValueChangeListener?.invoke(valueToDraw.toDouble())
                 this.invalidate()
             }
 
