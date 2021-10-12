@@ -292,9 +292,9 @@ class RangerView @JvmOverloads constructor(
 
         canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, subBarPaint)
 
-        canvas.drawCircle(fillPosition, barCenter, 15f, indicatorPaint)
+        canvas.drawCircle(fillPosition, barCenter, circleRadius.toFloat(), indicatorPaint)
 
-        val radius = 20f
+        val radius = indicatorRadius.toFloat()
 
         if (isBubbleVisible == true) {
             canvas.drawCircle(fillPosition, top - radius, radius, circlePaint)
