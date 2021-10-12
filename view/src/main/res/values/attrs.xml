@@ -5,5 +5,6 @@
     <declare-styleable name="RangerView">
         <attr name="baseBarColor" format="color" />
         <attr name="subBarColor" format="color" />
+        <attr name="circleColor" format="color" />
     </declare-styleable>
 </resources>

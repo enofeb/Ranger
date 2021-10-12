@@ -23,10 +23,13 @@ class RangerView @JvmOverloads constructor(
     @ColorInt
     private var _subBarColor = context.getColor(R.color.colorPink)
 
+    @ColorInt
+    private var _circleColor = context.getColor(R.color.colorGrey)
+
     private var barHeight: Int = 40
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var subBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var circleFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var circlePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var indicatorFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
 
@@ -50,6 +53,13 @@ class RangerView @JvmOverloads constructor(
         set(@ColorInt value) {
             _subBarColor = value
             subBarPaint.color = value
+        }
+
+    var circleColor: Int
+        @ColorInt get() = _circleColor
+        set(@ColorInt value) {
+            _circleColor = value
+            circlePaint.color = value
         }
 
 
@@ -82,7 +92,6 @@ class RangerView @JvmOverloads constructor(
 
 
     init {
-        circleFillPaint.color = context.getColor(R.color.colorGrey)
         valuePaint.color = context.getColor(R.color.colorWhite)
         indicatorFillPaint.color = context.getColor(R.color.colorWhite)
         valuePaint.textSize = 24f
@@ -156,6 +165,10 @@ class RangerView @JvmOverloads constructor(
                 R.styleable.RangerView_subBarColor,
                 subBarColor
             )
+            circleColor = typedArray.getColor(
+                R.styleable.RangerView_circleColor,
+                circleColor
+            )
         } catch (e: Exception) {
             //no-op
         } finally {
@@ -208,7 +221,7 @@ class RangerView @JvmOverloads constructor(
         val radius = 20f
 
         if (isBubbleVisible == true) {
-            canvas.drawCircle(fillPosition, top - radius, radius, circleFillPaint)
+            canvas.drawCircle(fillPosition, top - radius, radius, circlePaint)
         }
 
         val bounds = Rect()
