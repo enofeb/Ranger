@@ -7,6 +7,8 @@ import android.graphics.*
 import android.util.AttributeSet
 import android.view.View
 import android.view.MotionEvent
+import androidx.annotation.ColorInt
+import java.lang.Exception
 import kotlin.math.roundToInt
 
 class RangerView @JvmOverloads constructor(
@@ -15,9 +17,15 @@ class RangerView @JvmOverloads constructor(
     defStyleAttr: Int = R.attr.rangerView
 ) : View(context, attrs, defStyleAttr) {
 
+    @ColorInt
+    private var _baseBarColor = context.getColor(R.color.colorPurple)
+
+    @ColorInt
+    private var _subBarColor = context.getColor(R.color.colorPink)
+
     private var barHeight: Int = 40
-    private var barBasePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
-    private var barFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private var subBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var circleFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var indicatorFillPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var valuePaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -29,6 +37,20 @@ class RangerView @JvmOverloads constructor(
     private var animation: ValueAnimator? = null
 
     private var isBubbleVisible: Boolean? = false
+
+    var baseBarColor: Int
+        @ColorInt get() = _baseBarColor
+        set(@ColorInt value) {
+            _baseBarColor = value
+            baseBarPaint.color = value
+        }
+
+    var subBarColor: Int
+        @ColorInt get() = _subBarColor
+        set(@ColorInt value) {
+            _subBarColor = value
+            subBarPaint.color = value
+        }
 
 
     var currentValue: Double = 0.0
@@ -60,12 +82,12 @@ class RangerView @JvmOverloads constructor(
 
 
     init {
-        barBasePaint.color = context.getColor(R.color.colorPurple)
-        barFillPaint.color = context.getColor(R.color.colorPink)
         circleFillPaint.color = context.getColor(R.color.colorGrey)
         valuePaint.color = context.getColor(R.color.colorWhite)
         indicatorFillPaint.color = context.getColor(R.color.colorWhite)
         valuePaint.textSize = 24f
+
+        obtainStyledAttributes(attrs, defStyleAttr)
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -117,6 +139,30 @@ class RangerView @JvmOverloads constructor(
         return true
     }
 
+    private fun obtainStyledAttributes(attrs: AttributeSet?, defStyleAttr: Int) {
+        val typedArray = context.theme.obtainStyledAttributes(
+            attrs,
+            R.styleable.RangerView,
+            defStyleAttr,
+            0
+        )
+
+        try {
+            baseBarColor = typedArray.getColor(
+                R.styleable.RangerView_baseBarColor,
+                baseBarColor
+            )
+            subBarColor = typedArray.getColor(
+                R.styleable.RangerView_subBarColor,
+                subBarColor
+            )
+        } catch (e: Exception) {
+            //no-op
+        } finally {
+            typedArray.recycle()
+        }
+    }
+
     private fun updatePosition(value: Int) {
         val calculatedValue = (value * (maxValue - minValue) / 100)
         val displayValue = ((calculatedValue) + minValue)
@@ -146,7 +192,7 @@ class RangerView @JvmOverloads constructor(
         val right = paddingLeft + barLength
         val rectangle = RectF(left, top, right, bottom)
 
-        canvas.drawRoundRect(rectangle, halfBarHeight / 2, halfBarHeight / 2, barBasePaint)
+        canvas.drawRoundRect(rectangle, halfBarHeight / 2, halfBarHeight / 2, baseBarPaint)
 
         val percentFilled =
             calculateProgress(valueToDraw.toInt(), minValue, maxValue).toFloat() / 100
@@ -155,7 +201,7 @@ class RangerView @JvmOverloads constructor(
         val fillPosition = left + fillLength
         val fillRect = RectF(left + 10, top + 10, fillPosition - 10, bottom - 10)
 
-        canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, barFillPaint)
+        canvas.drawRoundRect(fillRect, halfBarHeight - 15, halfBarHeight - 15, subBarPaint)
 
         canvas.drawCircle(fillPosition, barCenter, 15f, indicatorFillPaint)
 
