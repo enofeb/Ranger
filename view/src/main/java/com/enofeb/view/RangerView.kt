@@ -4,11 +4,13 @@ import android.animation.ValueAnimator
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
+import android.os.Parcelable
 import android.util.AttributeSet
 import android.view.View
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
+import com.enofeb.view.state.SuperRangerState
 import java.lang.Exception
 import kotlin.math.roundToInt
 
@@ -174,6 +176,17 @@ class RangerView @JvmOverloads constructor(
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
         drawRangerBar(canvas)
+    }
+
+    override fun onSaveInstanceState(): Parcelable {
+        val superState = super.onSaveInstanceState()
+        return SuperRangerState(superState, currentValue)
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        val superState = state as? SuperRangerState
+        super.onRestoreInstanceState(superState?.savedState ?: state)
+        currentValue = superState?.currentValue ?: DEFAULT_CURRENT_VALUE
     }
 
     @SuppressLint("ClickableViewAccessibility")
