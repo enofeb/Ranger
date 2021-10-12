@@ -5,9 +5,12 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.TypedValue
 import android.view.View
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
+import androidx.annotation.Dimension
+import androidx.core.content.ContextCompat
 import java.lang.Exception
 import kotlin.math.roundToInt
 
@@ -31,6 +34,8 @@ class RangerView @JvmOverloads constructor(
 
     @ColorInt
     private var _indicatorTextColor = context.getColor(R.color.colorWhite)
+
+    private var _indicatorTextSize = 15f
 
     private var barHeight: Int = 40
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -82,6 +87,13 @@ class RangerView @JvmOverloads constructor(
             indicatorTextPaint.color = value
         }
 
+
+    var indicatorTextSize: Float
+        @Dimension get() = _indicatorTextSize
+        set(@Dimension value) {
+            _indicatorTextSize = value
+            indicatorTextPaint.textSize = value
+        }
 
     var currentValue: Double = 0.0
         set(value) {
@@ -192,6 +204,10 @@ class RangerView @JvmOverloads constructor(
             indicatorTextColor = typedArray.getColor(
                 R.styleable.RangerView_indicatorTextColor,
                 indicatorTextColor
+            )
+            indicatorTextSize = typedArray.getDimension(
+                R.styleable.RangerView_indicatorTextSize,
+                indicatorTextSize
             )
         } catch (e: Exception) {
             //no-op
