@@ -10,5 +10,7 @@
         <attr name="indicatorTextColor" format="color" />
         <attr name="indicatorTextSize" format="dimension" />
         <attr name="barHeight" format="integer" />
+        <attr name="circleRadius" format="integer" />
+        <attr name="indicatorRadius" format="integer" />
     </declare-styleable>
 </resources>

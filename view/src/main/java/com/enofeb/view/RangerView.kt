@@ -39,6 +39,10 @@ class RangerView @JvmOverloads constructor(
 
     private var _barHeight: Int = 40
 
+    private var _circleRadius: Int = 15
+
+    private var _indicatorRadius: Int = 20
+
 
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
     private var subBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -101,6 +105,18 @@ class RangerView @JvmOverloads constructor(
         get() = _barHeight
         set(value) {
             _barHeight = value
+        }
+
+    var circleRadius: Int
+        get() = _circleRadius
+        set(value) {
+            _circleRadius = value
+        }
+
+    var indicatorRadius: Int
+        get() = _indicatorRadius
+        set(value) {
+            _indicatorRadius = value
         }
 
     var currentValue: Double = 0.0
@@ -220,6 +236,14 @@ class RangerView @JvmOverloads constructor(
             barHeight = typedArray.getInteger(
                 R.styleable.RangerView_barHeight,
                 barHeight
+            )
+            circleRadius = typedArray.getInteger(
+                R.styleable.RangerView_circleRadius,
+                circleRadius
+            )
+            indicatorRadius = typedArray.getInteger(
+                R.styleable.RangerView_indicatorRadius,
+                indicatorRadius
             )
         } catch (e: Exception) {
             //no-op
