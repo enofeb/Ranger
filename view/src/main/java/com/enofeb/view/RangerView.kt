@@ -307,10 +307,6 @@ class RangerView @JvmOverloads constructor(
 
         val radius = indicatorRadius.toFloat()
 
-        if (isBubbleVisible == true) {
-            canvas.drawCircle(fillPosition, top - radius, radius, indicatorPaint)
-        }
-
         val bounds = Rect()
         val valueString = valueToDraw.roundToInt().toString()
         indicatorTextPaint.getTextBounds(valueString, 0, valueString.length, bounds)
@@ -318,7 +314,10 @@ class RangerView @JvmOverloads constructor(
 
         val y = top - radius
 
-        canvas.drawText(valueString, fillPosition, y, indicatorTextPaint)
+        if (isBubbleVisible == true) {
+            canvas.drawCircle(fillPosition, top - radius, radius, indicatorPaint)
+            canvas.drawText(valueString, fillPosition, y, indicatorTextPaint)
+        }
 
     }
 
