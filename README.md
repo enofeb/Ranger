@@ -69,3 +69,10 @@ allprojects {
     }
 }
 ```
+
+* Add Ranger to your module dependencies.
+```groovy
+dependencies {
+    implementation 'no-op'
+}
+```
