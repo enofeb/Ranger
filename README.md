@@ -9,5 +9,5 @@ Ranger is custom view which able to act like android seekbar.
 # Sample GIF
 
 <p align="center">
-  <img width="300" height="600" src="https://github.com/enofeb/Ranger/blob/dev/gif/ranger.gif">
+  <img width="300" height="600" src="https://github.com/enofeb/Ranger/blob/master/gif/ranger.gif">
 </p>
