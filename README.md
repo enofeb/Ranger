@@ -11,3 +11,17 @@ Ranger is custom view which able to act like android seekbar.
 <p align="center">
   <img src="https://github.com/enofeb/Ranger/blob/master/gif/ranger.gif">
 </p>
+
+# Simple Usage
+
+```kotlin
+<com.enofeb.view.RangerView
+        android:id="@+id/ranger"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+```
+
+```kotlin
+ranger.minValue = 0.0
+ranger.maxValue = 100.0
+```
