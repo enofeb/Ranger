@@ -49,6 +49,8 @@ class RangerView @JvmOverloads constructor(
 
     private var _maxValue: Double = 100.0
 
+    private var _isIndicatorEnabled: Boolean = true
+
     private var valueToDraw: Float = 5f
 
     private var baseBarPaint: Paint = Paint(Paint.ANTI_ALIAS_FLAG)
@@ -134,6 +136,12 @@ class RangerView @JvmOverloads constructor(
         get() = _maxValue
         set(value) {
             _maxValue = value
+        }
+
+    var isIndicatorEnabled: Boolean
+        get() = _isIndicatorEnabled
+        set(value) {
+            _isIndicatorEnabled = value
         }
 
     var currentValue: Double = DEFAULT_CURRENT_VALUE
@@ -274,6 +282,10 @@ class RangerView @JvmOverloads constructor(
                 R.styleable.RangerView_indicatorRadius,
                 indicatorRadius
             )
+            isIndicatorEnabled = typedArray.getBoolean(
+                R.styleable.RangerView_isIndicatorEnabled,
+                isIndicatorEnabled
+            )
         } catch (e: Exception) {
             //no-op
         } finally {
@@ -332,7 +344,7 @@ class RangerView @JvmOverloads constructor(
 
         val y = top - radius
 
-        if (isBubbleVisible == true) {
+        if (isBubbleVisible == true && isIndicatorEnabled) {
             canvas.drawCircle(fillPosition, top - radius, radius, indicatorPaint)
             canvas.drawText(valueString, fillPosition, y, indicatorTextPaint)
         }

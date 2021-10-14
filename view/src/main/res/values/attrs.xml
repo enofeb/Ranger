@@ -12,5 +12,6 @@
         <attr name="barHeight" format="integer" />
         <attr name="circleRadius" />
         <attr name="indicatorRadius" format="integer" />
+        <attr name="isIndicatorEnabled" format="boolean" />
     </declare-styleable>
 </resources>

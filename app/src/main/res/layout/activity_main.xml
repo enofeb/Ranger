@@ -12,6 +12,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:padding="15dp"
-        android:text="Hello World!"/>
+        android:text="Hello World!"
+        app:isIndicatorEnabled="true" />
 
 </RelativeLayout>
