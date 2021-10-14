@@ -26,7 +26,7 @@ ranger.minValue = 0.0
 ranger.maxValue = 100.0
 ```
 
-## Features
+## Main Features
 * You can set and get current value programmatically.
 ```kotlin
 ranger.currentValue = 35.0
@@ -37,4 +37,25 @@ val lastValue = ranger.currentValue
 ranger.onValueChangeListener = { lastValue->
   //no-op
 }
+```
+* You can disable indicator.
+```kotlin
+ranger.isIndicatorEnabled = false
+```
+
+## XML Attributes
+
+```xml
+<declare-styleable name="RangerView">
+    <attr name="baseBarColor" format="color" />
+    <attr name="subBarColor" format="color" />
+    <attr name="circleColor" format="color" />
+    <attr name="indicatorColor" format="color" />
+    <attr name="indicatorTextColor" format="color" />
+    <attr name="indicatorTextSize" format="dimension" />
+    <attr name="barHeight" format="integer" />
+    <attr name="circleRadius" />
+    <attr name="indicatorRadius" format="integer" />
+    <attr name="isIndicatorEnabled" format="boolean" />
+</declare-styleable>
 ```
