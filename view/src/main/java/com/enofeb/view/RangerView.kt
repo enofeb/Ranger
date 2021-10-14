@@ -47,7 +47,7 @@ class RangerView @JvmOverloads constructor(
 
     private var _minValue: Double = 0.0
 
-    private var _maxValue: Double = 100.0
+    private var _maxValue: Double = 0.0
 
     private var _isIndicatorEnabled: Boolean = true
 

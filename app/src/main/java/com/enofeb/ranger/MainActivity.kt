@@ -11,6 +11,8 @@ class MainActivity : AppCompatActivity() {
 
         val ranger = findViewById<RangerView>(R.id.ranger)
 
-        ranger.currentValue = 42.0
+        ranger.minValue = 0.0
+        ranger.maxValue = 100.0
+        ranger.currentValue = 35.0
     }
 }
