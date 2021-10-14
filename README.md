@@ -76,3 +76,7 @@ dependencies {
     implementation 'no-op'
 }
 ```
+
+## License
+```
+```
