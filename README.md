@@ -59,3 +59,13 @@ ranger.isIndicatorEnabled = false
     <attr name="isIndicatorEnabled" format="boolean" />
 </declare-styleable>
 ```
+
+## Download
+* Add Jitpack to your root `build.gradle` repositories.
+```groovy
+allprojects {
+    repositories {
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
