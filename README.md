@@ -20,7 +20,7 @@ Ranger is custom view which able to act like android seekbar.
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 ```
-
+You must give an min and max value after xml declaration.
 ```kotlin
 ranger.minValue = 0.0
 ranger.maxValue = 100.0
