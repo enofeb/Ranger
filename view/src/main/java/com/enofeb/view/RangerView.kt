@@ -10,6 +10,7 @@ import android.view.View
 import android.view.MotionEvent
 import androidx.annotation.ColorInt
 import androidx.annotation.Dimension
+import androidx.core.content.ContextCompat
 import com.enofeb.view.state.SuperRangerState
 import java.lang.Exception
 import kotlin.math.roundToInt
@@ -23,19 +24,19 @@ class RangerView @JvmOverloads constructor(
 ) : View(context, attrs, defStyleAttr) {
 
     @ColorInt
-    private var _baseBarColor = context.getColor(R.color.colorPurple)
+    private var _baseBarColor = ContextCompat.getColor(context, R.color.colorPurple)
 
     @ColorInt
-    private var _subBarColor = context.getColor(R.color.colorPink)
+    private var _subBarColor = ContextCompat.getColor(context, R.color.colorPink)
 
     @ColorInt
-    private var _circleColor = context.getColor(R.color.colorWhite)
+    private var _circleColor = ContextCompat.getColor(context, R.color.colorWhite)
 
     @ColorInt
-    private var _indicatorColor = context.getColor(R.color.colorGrey)
+    private var _indicatorColor = ContextCompat.getColor(context, R.color.colorGrey)
 
     @ColorInt
-    private var _indicatorTextColor = context.getColor(R.color.colorWhite)
+    private var _indicatorTextColor = ContextCompat.getColor(context, R.color.colorWhite)
 
     private var _indicatorTextSize = 15f
 
