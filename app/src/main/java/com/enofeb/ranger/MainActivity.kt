@@ -14,5 +14,9 @@ class MainActivity : AppCompatActivity() {
         ranger.minValue = 0.0
         ranger.maxValue = 100.0
         ranger.currentValue = 35.0
+
+        ranger.onValueChangeListener = { lastValue->
+            //no-op
+        }
     }
 }

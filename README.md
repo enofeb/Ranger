@@ -25,3 +25,16 @@ You must give an min and max value after xml declaration.
 ranger.minValue = 0.0
 ranger.maxValue = 100.0
 ```
+
+## Features
+* You can set and get current value programmatically.
+```kotlin
+ranger.currentValue = 35.0
+val lastValue = ranger.currentValue
+```
+* You can listen value change instantly.
+```kotlin
+ranger.onValueChangeListener = { lastValue->
+  //no-op
+}
+```
